@@ -13,6 +13,7 @@ import org.wikipedia.main.MainActivity
 class EspressoTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    //val intentsTestRule = IntentsTestRule(MainActivity::class.java, true, true)
 
     @Before
     fun setUp() {
@@ -29,6 +30,9 @@ class EspressoTest {
         CustomizeTheFeedScreen { checkNoneCheckboxesAreChecked() }
     }
 
+    /**
+     * Тест кейс №2
+     */
     @Test
     fun checkAboutAppBlocksAreDisplayed() {
         BottomNavigationBarScreen {
@@ -41,6 +45,18 @@ class EspressoTest {
             checkAboutTranslatorsBlockIsDisplayed()
             checkLicenseBlockIsDisplayed()
         }
+    }
+
+    /**
+     * Тест кейс №3
+     */
+    @Test
+    fun checkSettingsPrivacyPolicyLink() {
+        BottomNavigationBarScreen {
+            clickMoreButton()
+            clickSettingsButton()
+        }
+        SettingsScreen { checkPrivacyPolicyButtonFollowLink() }
     }
 
 
