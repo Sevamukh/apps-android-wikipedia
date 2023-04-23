@@ -13,15 +13,12 @@ import org.wikipedia.main.MainActivity
 class EspressoTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
-    //val intentsTestRule = IntentsTestRule(MainActivity::class.java, true, true)
 
     @Before
-    fun setUp() {
-        WelcomeScreen {clickSkipButton()}
-    }
+    fun setUp() { WelcomeScreen {clickSkipButton()} }
 
     @Test
-    fun checkAllCheckboxesAreChecked() {
+    fun checkAllCustomizeTheFeedCheckboxesAreChecked() {
         BottomNavigationBarScreen {
             clickMoreButton()
             clickSettingsButton()
@@ -31,7 +28,7 @@ class EspressoTest {
     }
 
     /**
-     * Тест кейс №2
+     * Тест-кейс №2
      */
     @Test
     fun checkAboutAppBlocksAreDisplayed() {
@@ -48,10 +45,40 @@ class EspressoTest {
     }
 
     /**
-     * Тест кейс №3
+     * Тест-кейс №3
      */
     @Test
     fun checkSettingsPrivacyPolicyLink() {
+        BottomNavigationBarScreen {
+            clickMoreButton()
+            clickSettingsButton()
+        }
+        SettingsScreen { checkPrivacyPolicyButtonFollowLink() }
+    }
+
+    /**
+     * Тест-кейс №4
+     */
+    @Test
+    fun checkCreateAccountPasswordVisibility() {
+        BottomNavigationBarScreen {
+            clickMoreButton()
+            clickAccountButton()
+        }
+        CreateAccountScreen {
+            enterPassword()
+            clickPasswordVisibilityEyeButton()
+            checkPasswordIsReadable()
+            clickPasswordVisibilityEyeButton()
+            checkPasswordIsHidden()
+        }
+    }
+
+    /**
+     * Тест-кейс №5
+     */
+    @Test
+    fun checkColor() {
         BottomNavigationBarScreen {
             clickMoreButton()
             clickSettingsButton()
