@@ -1,7 +1,6 @@
 package org.wikipedia.fintech.matchers
 
 import android.content.res.Resources
-import android.os.Build
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorRes
@@ -9,7 +8,7 @@ import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.Description
 
-class TextViewHintColorMatcher(@ColorRes private val resId: Int) : BoundedMatcher<View, TextView>(TextView::class.java) {
+class HasTextViewHintColor(@ColorRes private val resId: Int) : BoundedMatcher<View, TextView>(TextView::class.java) {
     private val color = colorRes(resId)
 
     override fun describeTo(description: Description) {
@@ -26,7 +25,6 @@ class TextViewHintColorMatcher(@ColorRes private val resId: Int) : BoundedMatche
     }
 }
 
-
-fun colorRes(@ColorRes resId: Int, theme: Resources.Theme? = null): Int {
+private fun colorRes(@ColorRes resId: Int, theme: Resources.Theme? = null): Int {
     return InstrumentationRegistry.getInstrumentation().targetContext.resources.getColor(resId, theme)
 }

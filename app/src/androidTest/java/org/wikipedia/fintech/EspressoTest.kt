@@ -8,11 +8,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.wikipedia.fintech.screens.*
 import org.wikipedia.main.MainActivity
+import org.wikipedia.fintech.testData.CreateAccountData
 
 @RunWith(AndroidJUnit4::class)
 class EspressoTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
+
+    val data = CreateAccountData()
 
     @Before
     fun setUp() { WelcomeScreen {clickSkipButton()} }
@@ -48,7 +51,7 @@ class EspressoTest {
      * Тест-кейс №3
      */
     @Test
-    fun checkSettingsPrivacyPolicyLink() {
+    fun checkSettingsPrivacyPolicyButtonLink() {
         BottomNavigationBarScreen {
             clickMoreButton()
             clickSettingsButton()
@@ -66,9 +69,9 @@ class EspressoTest {
             clickAccountButton()
         }
         CreateAccountScreen {
-            enterPassword()
+            enterPassword(data.shortPassword)
             clickPasswordVisibilityEyeButton()
-            checkPasswordIsReadable()
+            checkPasswordIsReadable(data.shortPassword)
             clickPasswordVisibilityEyeButton()
             checkPasswordIsHidden()
         }
@@ -78,12 +81,20 @@ class EspressoTest {
      * Тест-кейс №5
      */
     @Test
-    fun checkColor() {
+    fun checkCreateAccountPasswordFieldValidation() {
         BottomNavigationBarScreen {
             clickMoreButton()
-            clickSettingsButton()
+            clickAccountButton()
         }
-        SettingsScreen { checkPrivacyPolicyButtonFollowLink() }
+        CreateAccountScreen {
+            enterUserName(data.defaultUsername)
+            enterPassword(data.shortPassword)
+            enterRepeatPassword(data.shortPassword)
+            enterEmail(data.defaultEmail)
+            clickSubmitButton()
+            checkPasswordHintErrorColor()
+            checkShortPasswordErrorMessage()
+        }
     }
 
 
