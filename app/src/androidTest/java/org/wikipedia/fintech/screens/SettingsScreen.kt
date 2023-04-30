@@ -1,22 +1,17 @@
 package org.wikipedia.fintech.screens
 
-import android.content.Intent.ACTION_VIEW
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers.*
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withChild
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.allOf
 import org.wikipedia.R
-import androidx.test.platform.app.InstrumentationRegistry
-
 
 class SettingsScreen {
-    private val mainViewMatcher = withId(R.id.recycler_view)
     private val exploreFeedButtonMatcher = withChild(
         withChild(
             withText(R.string.preference_title_customize_explore_feed)
@@ -33,7 +28,6 @@ class SettingsScreen {
             withText(R.string.privacy_policy_description)
         )
     )
-    private val privacyPolicyUri = R.string.privacy_policy_url
 
     fun clickExploreFeedButton(){
         scrollToRecyclerView(exploreFeedButtonMatcher)
@@ -45,26 +39,17 @@ class SettingsScreen {
         onView(aboutAppButtonMatcher).perform(click())
     }
 
-    private fun clickPrivacyPolicyButton(){
+    fun clickPrivacyPolicyButton(){
         scrollToRecyclerView(privacyPolicyButtonMatcher)
         onView(privacyPolicyButtonMatcher).perform(click())
-    }
-
-    fun checkPrivacyPolicyButtonFollowLink(){
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val uri = context.getString(privacyPolicyUri)
-        Intents.init()
-            clickPrivacyPolicyButton()
-            Intents.intended( allOf(hasAction(ACTION_VIEW), hasData(uri)) )
-        Intents.release()
-    }
-
-    private fun scrollToRecyclerView(matcherToItem: Matcher<View>) {
-        onView(mainViewMatcher)
-            .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(matcherToItem))
     }
 
     companion object {
         inline operator fun invoke(crossinline block: SettingsScreen.() -> Unit) = SettingsScreen().block()
     }
+}
+
+private fun scrollToRecyclerView(matcherToItem: Matcher<View>) {
+    onView(withId(R.id.recycler_view))
+        .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(matcherToItem))
 }

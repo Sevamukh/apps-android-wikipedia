@@ -1,7 +1,11 @@
 package org.wikipedia.fintech
 
+import android.content.Intent
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -9,13 +13,14 @@ import org.junit.runner.RunWith
 import org.wikipedia.fintech.screens.*
 import org.wikipedia.main.MainActivity
 import org.wikipedia.fintech.testData.CreateAccountData
+import org.wikipedia.R.string.privacy_policy_url
 
 @RunWith(AndroidJUnit4::class)
 class EspressoTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    val data = CreateAccountData()
+    private val accountData = CreateAccountData()
 
     @Before
     fun setUp() { WelcomeScreen {clickSkipButton()} }
@@ -56,7 +61,13 @@ class EspressoTest {
             clickMoreButton()
             clickSettingsButton()
         }
-        SettingsScreen { checkPrivacyPolicyButtonFollowLink() }
+        val uri = InstrumentationRegistry.getInstrumentation().targetContext
+            .getString(privacy_policy_url)
+        Intents.init()
+            SettingsScreen { clickPrivacyPolicyButton() }
+            Intents.intended(hasAction(Intent.ACTION_VIEW))
+            Intents.intended(hasData(uri))
+        Intents.release()
     }
 
     /**
@@ -69,9 +80,9 @@ class EspressoTest {
             clickAccountButton()
         }
         CreateAccountScreen {
-            enterPassword(data.shortPassword)
+            enterPassword(accountData.shortPassword)
             clickPasswordVisibilityEyeButton()
-            checkPasswordIsReadable(data.shortPassword)
+            checkPasswordIsReadable(accountData.shortPassword)
             clickPasswordVisibilityEyeButton()
             checkPasswordIsHidden()
         }
@@ -87,16 +98,13 @@ class EspressoTest {
             clickAccountButton()
         }
         CreateAccountScreen {
-            enterUserName(data.defaultUsername)
-            enterPassword(data.shortPassword)
-            enterRepeatPassword(data.shortPassword)
-            enterEmail(data.defaultEmail)
+            enterUserName(accountData.defaultUsername)
+            enterPassword(accountData.shortPassword)
+            enterRepeatPassword(accountData.shortPassword)
+            enterEmail(accountData.defaultEmail)
             clickSubmitButton()
             checkPasswordHintErrorColor()
             checkShortPasswordErrorMessage()
         }
     }
-
-
-
 }

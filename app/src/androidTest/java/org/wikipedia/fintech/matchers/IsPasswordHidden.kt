@@ -10,9 +10,9 @@ class IsPasswordHidden: TypeSafeMatcher<View>() {
    override fun describeTo(description: Description) {
        description.appendText("Password is hidden")
    }
-   override fun matchesSafely(item: View): Boolean {
-       if (item !is EditText) { return false }
-       val currentTransformationMethod = item.transformationMethod
+   override fun matchesSafely(view: View): Boolean {
+       if (view !is EditText) { return false }
+       val currentTransformationMethod = view.transformationMethod
        return currentTransformationMethod is PasswordTransformationMethod
    }
 }

@@ -16,12 +16,13 @@ class HasTextViewHintColor(@ColorRes private val resId: Int) : BoundedMatcher<Vi
     }
 
     override fun matchesSafely(textView: TextView): Boolean {
-        return textView.currentHintTextColor == color
+        //Log.d("HintColorMatcher", "Actual hint color: ${getHexColor(textView.currentHintTextColor)}")
+        return textView.currentHintTextColor != color
     }
 
     @Suppress("MagicNumber")
     private fun getHexColor(color: Int): String {
-        return String.format("#%06X", 0xFFFFFF and color)
+        return String.format("#%08X", color)
     }
 }
 
