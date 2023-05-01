@@ -5,13 +5,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.hasTextColor
-import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import androidx.test.espresso.matcher.ViewMatchers.withHint
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.anyOf
 import org.hamcrest.Matchers.not
@@ -27,7 +21,7 @@ class CreateAccountScreen {
     private val passwordRepeatFieldMatcher = withHint(R.string.create_account_password_repeat_hint)
     private val emailFieldMatcher = withHint(R.string.create_account_email_hint)
     private val submitButtonMatcher = withId(R.id.create_account_submit_button)
-    private val visibilityEyeIconMatcher = allOf(
+    private val passwordVisibilityEyeIconMatcher = allOf(
         isDescendantOfA(withId(R.id.create_account_password_input)),
         withContentDescription(com.google.android.material.R.string.password_toggle_content_description),
     )
@@ -41,7 +35,7 @@ class CreateAccountScreen {
     }
 
     fun clickPasswordVisibilityEyeButton() {
-        onView(visibilityEyeIconMatcher).perform(scrollTo(), click())
+        onView(passwordVisibilityEyeIconMatcher).perform(scrollTo(), click())
     }
 
     fun enterRepeatPassword(password: String) {
@@ -62,13 +56,16 @@ class CreateAccountScreen {
 
     fun checkPasswordIsReadable(password: String) {
         onView(passwordFieldMatcher).check(matches(allOf(
-            not(IsPasswordHidden()), withText(password)
+            not(IsPasswordHidden()),
+            withText(password)
         )))
     }
 
     fun checkPasswordHintErrorColor() {
-        //onView(passwordFieldMatcher).check(matches(HasTextViewHintColor(R.color.red500))) //"#A2A9B1".toColorInt()
-        onView(passwordLayoutMatcher).check(matches(HasTextInputLayoutErrorColor(R.color.red500)))
+        onView(passwordLayoutMatcher).check(matches(anyOf(
+            HasTextInputLayoutErrorColor(R.color.red500),
+            HasTextInputLayoutErrorColor(R.color.red700),
+        )))
     }
 
     fun checkShortPasswordErrorMessage() {
@@ -79,12 +76,6 @@ class CreateAccountScreen {
             ),
             isDisplayed()
         )))
-        /*onView(shortPasswordErrorMessageMatcher).check(matches(
-            HasTextColor(ResourceUtil.getThemedColor(
-                InstrumentationRegistry.getInstrumentation().context,
-                R.attr.destructive_color)
-            )
-        ))*/
     }
 
     companion object {

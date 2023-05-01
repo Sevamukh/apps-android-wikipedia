@@ -13,7 +13,7 @@ class CustomizeTheFeedScreen {
         isNotChecked()
     )
 
-    fun checkNoneCheckboxesAreChecked() {
+    fun checkAllCheckboxesAreChecked() {
         onView(anyUncheckedCheckboxMatcher).check(doesNotExist())
     }
 

@@ -25,6 +25,9 @@ class EspressoTest {
     @Before
     fun setUp() { WelcomeScreen {clickSkipButton()} }
 
+    /**
+     * Тест-кейс №1
+     */
     @Test
     fun checkAllCustomizeTheFeedCheckboxesAreChecked() {
         BottomNavigationBarScreen {
@@ -32,7 +35,7 @@ class EspressoTest {
             clickSettingsButton()
         }
         SettingsScreen { clickExploreFeedButton() }
-        CustomizeTheFeedScreen { checkNoneCheckboxesAreChecked() }
+        CustomizeTheFeedScreen { checkAllCheckboxesAreChecked() }
     }
 
     /**

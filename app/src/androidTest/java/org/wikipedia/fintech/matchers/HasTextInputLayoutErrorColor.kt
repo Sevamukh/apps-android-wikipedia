@@ -11,12 +11,17 @@ import org.hamcrest.TypeSafeMatcher
 class HasTextInputLayoutErrorColor(@ColorRes resId: Int): TypeSafeMatcher<View>() {
     val color = colorRes(resId)
     override fun describeTo(description: Description) {
-        description.appendText("Password is hidden")
+        description.appendText("textInputLayout.errorCurrentTextColors is ${getHexColor(color)}")
     }
 
     override fun matchesSafely(item: View?): Boolean {
         if (item !is TextInputLayout) { return false }
         return item.errorCurrentTextColors == color
+    }
+
+    @Suppress("MagicNumber")
+    private fun getHexColor(color: Int): String {
+        return String.format("#%08X", color)
     }
 }
 
